@@ -1,0 +1,24 @@
+<svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Brand Gradient -->
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E66FF" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+  <!-- Brackets -->
+  <path d="M 38 22 H 22 V 38" stroke="url(#brandGrad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
+  <path d="M 22 82 V 98 H 38" stroke="url(#brandGrad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
+  
+  <!-- F Vertical Stem -->
+  <path d="M 38 30 V 90" stroke="url(#brandGrad)" stroke-width="11.5" stroke-linecap="round" />
+  
+  <!-- F Top Bar / B Top Loop -->
+  <path d="M 38 30 H 68 C 78 30, 88 36, 88 46 C 88 56, 78 62, 68 62 H 38" stroke="url(#brandGrad)" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- F Middle Bar -->
+  <path d="M 38 52 H 54" stroke="url(#brandGrad)" stroke-width="11.5" stroke-linecap="round" />
+  
+  <!-- B Bottom Loop with diagonal cut -->
+  <path d="M 52 76 H 68 C 78 76, 88 81, 88 90 C 88 99, 78 104, 68 104 H 48" stroke="url(#brandGrad)" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
