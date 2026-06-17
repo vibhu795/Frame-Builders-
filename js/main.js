@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initInstagramGrowthServices();
   initServiceCardsClick();
   initWhyChooseStack();
+  initPortfolioVFXStack();
 });
 
 /* ==========================================================================
@@ -184,26 +185,58 @@ function initPortfolioFilter() {
 
   if (filterBtns.length === 0 || portfolioCards.length === 0) return;
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Toggle button states
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  const applyFilter = (filterValue, immediate = false) => {
+    const vfxSlider = document.getElementById('vfx-portfolio-slider');
+    const portGrid = document.querySelector('.portfolio-grid');
 
-      const filterValue = btn.getAttribute('data-filter');
+    if (vfxSlider && portGrid) {
+      if (filterValue === 'vfx') {
+        portGrid.style.display = 'none';
+        vfxSlider.style.display = 'flex';
+        if (immediate) {
+          vfxSlider.style.opacity = '1';
+          vfxSlider.style.transform = 'translateY(0)';
+          vfxSlider.classList.add('active');
+        } else {
+          setTimeout(() => {
+            vfxSlider.style.opacity = '1';
+            vfxSlider.style.transform = 'translateY(0)';
+            vfxSlider.classList.add('active');
+          }, 50);
+        }
+      } else {
+        portGrid.style.display = 'grid';
+        vfxSlider.style.display = 'none';
+      }
+    }
 
-      portfolioCards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
+    portfolioCards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      const isVertical = card.querySelector('.vertical-ratio') !== null;
 
+      if (immediate) {
+        card.style.transition = 'none';
+      } else {
         card.style.transition = 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
 
-        if (filterValue === 'all' || cardCategory === filterValue) {
-          card.classList.remove('hide');
+      if ((filterValue === 'all' && !isVertical) || cardCategory === filterValue) {
+        card.classList.remove('hide');
+        if (immediate) {
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+        } else {
           // Brief timeout to trigger reflow and scale animation
           setTimeout(() => {
             card.style.opacity = '1';
             card.style.transform = 'scale(1)';
           }, 50);
+        }
+      } else {
+        if (immediate) {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.9)';
+          card.classList.add('hide');
         } else {
           card.style.opacity = '0';
           card.style.transform = 'scale(0.9)';
@@ -212,9 +245,27 @@ function initPortfolioFilter() {
             card.classList.add('hide');
           }, 400);
         }
-      });
+      }
+    });
+  };
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Toggle button states
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filterValue = btn.getAttribute('data-filter');
+      applyFilter(filterValue);
     });
   });
+
+  // Apply initial filter state immediately to avoid initial flash of vertical cards in 'all' view
+  const activeBtn = document.querySelector('.filter-btn.active');
+  if (activeBtn) {
+    const initialFilter = activeBtn.getAttribute('data-filter');
+    applyFilter(initialFilter, true);
+  }
 }
 
 /* ==========================================================================
@@ -226,7 +277,8 @@ function initStatsCounter() {
   if (stats.length === 0) return;
 
   const countUp = (element) => {
-    const target = parseInt(element.getAttribute('data-count'), 10);
+    const target = parseFloat(element.getAttribute('data-count'));
+    const decimals = parseInt(element.getAttribute('data-decimals') || '0', 10);
     const duration = 2000; // 2 seconds
     const suffix = element.getAttribute('data-suffix') || '';
     const prefix = element.getAttribute('data-prefix') || '';
@@ -238,14 +290,14 @@ function initStatsCounter() {
 
       // Easing out quadratic function
       const easeProgress = progress * (2 - progress);
-      const currentVal = Math.floor(easeProgress * target);
+      const currentVal = (easeProgress * target).toFixed(decimals);
 
       element.textContent = `${prefix}${currentVal}${suffix}`;
 
       if (progress < 1) {
         window.requestAnimationFrame(step);
       } else {
-        element.textContent = `${prefix}${target}${suffix}`;
+        element.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
       }
     };
 
@@ -598,12 +650,40 @@ function initInstagramGrowthServices() {
   if (payMethodUpi) payMethodUpi.addEventListener('change', updatePaymentMethodSelectionUI);
   if (payMethodPaypal) payMethodPaypal.addEventListener('change', updatePaymentMethodSelectionUI);
 
+  // Platform Selector Toggling
+  const platformBtns = document.querySelectorAll('.platform-btn');
+  const instagramTabs = document.getElementById('instagram-tabs-container');
+  const youtubeTabs = document.getElementById('youtube-tabs-container');
+
+  platformBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const platform = btn.getAttribute('data-platform');
+
+      platformBtns.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (platform === 'instagram') {
+        if (instagramTabs) instagramTabs.style.display = 'flex';
+        if (youtubeTabs) youtubeTabs.style.display = 'none';
+
+        const firstInstaTab = document.getElementById('tab-followers');
+        if (firstInstaTab) firstInstaTab.click();
+      } else {
+        if (instagramTabs) instagramTabs.style.display = 'none';
+        if (youtubeTabs) youtubeTabs.style.display = 'flex';
+
+        const firstYtTab = document.getElementById('tab-yt-subscribers');
+        if (firstYtTab) firstYtTab.click();
+      }
+    });
+  });
+
   // Tab switching
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
 
-      // Toggle tab buttons active status
+      // Toggle tab buttons active status inside both containers
       tabBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
@@ -627,58 +707,83 @@ function initInstagramGrowthServices() {
     });
   };
 
-  // Open modal on buy click
-  buyBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const service = btn.getAttribute('data-service');
-      const quantity = btn.getAttribute('data-quantity');
-      const price = btn.getAttribute('data-price');
-      const priceUsd = btn.getAttribute('data-price-usd');
+  // Open modal on buy click (re-bind to ensure all dynamic elements receive listeners)
+  const bindBuyButtons = () => {
+    const buyBtns = document.querySelectorAll('.buy-btn');
+    buyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const service = btn.getAttribute('data-service');
+        const quantity = btn.getAttribute('data-quantity');
+        const price = btn.getAttribute('data-price');
+        const priceUsd = btn.getAttribute('data-price-usd');
 
-      activePackage = { service, quantity, price, priceUsd };
+        activePackage = { service, quantity, price, priceUsd };
 
-      // Set up modal contents based on selected package
-      const formattedQty = parseInt(quantity).toLocaleString('en-IN');
-      if (service === 'followers') {
-        modalTitle.textContent = 'Purchase Instagram Followers';
-        modalSubtitle.textContent = 'High-retention profiles delivered organically.';
-        summaryPackage.textContent = `${formattedQty} Followers`;
-        labelTargetInput.textContent = 'Instagram Username';
-        orderTargetInput.setAttribute('placeholder', '@yourusername');
-        targetInputHint.textContent = 'Your account must be public during delivery.';
-      } else if (service === 'views') {
-        modalTitle.textContent = 'Purchase Reel Views';
-        modalSubtitle.textContent = 'Supercharge your Reel reach with instant views.';
-        summaryPackage.textContent = `${formattedQty} Reel Views`;
-        labelTargetInput.textContent = 'Instagram Reel URL';
-        orderTargetInput.setAttribute('placeholder', 'https://www.instagram.com/reel/...');
-        targetInputHint.textContent = 'Paste the full link to your public Reel.';
-      } else if (service === 'likes') {
-        modalTitle.textContent = 'Purchase Instagram Likes';
-        modalSubtitle.textContent = 'Get real likes instantly on your photos or videos.';
-        summaryPackage.textContent = `${formattedQty} Likes`;
-        labelTargetInput.textContent = 'Instagram Post URL';
-        orderTargetInput.setAttribute('placeholder', 'https://www.instagram.com/p/...');
-        targetInputHint.textContent = 'Paste the full link to your public Instagram post.';
-      }
+        const formattedQty = parseInt(quantity).toLocaleString('en-IN');
+        if (service === 'followers') {
+          modalTitle.textContent = 'Amplify Your Audience';
+          modalSubtitle.textContent = 'Strengthen your digital authority with high-quality profiles delivered organically.';
+          summaryPackage.textContent = `${formattedQty} High-Quality Connections`;
+          labelTargetInput.textContent = 'Instagram Username';
+          orderTargetInput.setAttribute('placeholder', '@yourusername');
+          targetInputHint.textContent = 'Your account must be public during delivery.';
+        } else if (service === 'views') {
+          modalTitle.textContent = 'Boost Content Reach';
+          modalSubtitle.textContent = 'Supercharge your Reel visibility and kickstart algorithm distribution.';
+          summaryPackage.textContent = `${formattedQty} Target Content Views`;
+          labelTargetInput.textContent = 'Instagram Reel URL';
+          orderTargetInput.setAttribute('placeholder', 'https://www.instagram.com/reel/...');
+          targetInputHint.textContent = 'Paste the full link to your public Reel.';
+        } else if (service === 'likes') {
+          modalTitle.textContent = 'Optimize Post Engagement';
+          modalSubtitle.textContent = 'Gain authentic social validation and increase feed placement potential.';
+          summaryPackage.textContent = `${formattedQty} Target Post Likes`;
+          labelTargetInput.textContent = 'Instagram Post URL';
+          orderTargetInput.setAttribute('placeholder', 'https://www.instagram.com/p/...');
+          targetInputHint.textContent = 'Paste the full link to your public Instagram post.';
+        } else if (service === 'yt-subscribers') {
+          modalTitle.textContent = 'Amplify YouTube Channel';
+          modalSubtitle.textContent = 'Grow your channel subscribers organically with safe and secure delivery.';
+          summaryPackage.textContent = `${formattedQty} Real Channel Subscribers`;
+          labelTargetInput.textContent = 'YouTube Channel Link / Username';
+          orderTargetInput.setAttribute('placeholder', 'https://www.youtube.com/@yourchannel');
+          targetInputHint.textContent = 'Your subscriber count must not be hidden.';
+        } else if (service === 'yt-views') {
+          modalTitle.textContent = 'Boost Video Reach';
+          modalSubtitle.textContent = 'Supercharge your YouTube video views and reach more audiences.';
+          summaryPackage.textContent = `${formattedQty} High-Quality Video Views`;
+          labelTargetInput.textContent = 'YouTube Video URL';
+          orderTargetInput.setAttribute('placeholder', 'https://www.youtube.com/watch?v=...');
+          targetInputHint.textContent = 'Provide a valid link to a public video.';
+        } else if (service === 'yt-likes') {
+          modalTitle.textContent = 'Optimize Video Engagement';
+          modalSubtitle.textContent = 'Increase likes on your YouTube video to boost algorithmic authority.';
+          summaryPackage.textContent = `${formattedQty} Real Video Likes`;
+          labelTargetInput.textContent = 'YouTube Video URL';
+          orderTargetInput.setAttribute('placeholder', 'https://www.youtube.com/watch?v=...');
+          targetInputHint.textContent = 'Provide a valid link to a public video.';
+        }
 
-      summaryPrice.innerHTML = `₹${price} <span class="price-usd-modal">/ $${priceUsd}</span>`;
+        summaryPrice.innerHTML = `₹${price} <span class="price-usd-modal">/ $${priceUsd}</span>`;
 
-      // Clear inputs & Reset step
-      orderTargetInput.value = '';
-      orderContactInput.value = '';
-      if (utrInput) utrInput.value = '';
-      if (payMethodUpi) {
-        payMethodUpi.checked = true;
-        updatePaymentMethodSelectionUI();
-      }
-      goToStep(1);
+        // Clear inputs & Reset step
+        orderTargetInput.value = '';
+        orderContactInput.value = '';
+        if (utrInput) utrInput.value = '';
+        if (payMethodUpi) {
+          payMethodUpi.checked = true;
+          updatePaymentMethodSelectionUI();
+        }
+        goToStep(1);
 
-      // Display Modal
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Lock scrolling
+        // Display Modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Lock scrolling
+      });
     });
-  });
+  };
+
+  bindBuyButtons();
 
   // Close modal
   const closeModal = () => {
@@ -705,13 +810,13 @@ function initInstagramGrowthServices() {
       callback();
       return;
     }
-    
+
     let script = document.querySelector(`script[src*="paypal.com/sdk/js"]`);
     if (script) {
       script.addEventListener('load', callback);
       return;
     }
-    
+
     script = document.createElement('script');
     script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`;
     script.async = true;
@@ -729,9 +834,9 @@ function initInstagramGrowthServices() {
     window.paypal.Buttons({
       style: {
         layout: 'vertical',
-        color:  'gold',
-        shape:  'rect',
-        label:  'paypal'
+        color: 'gold',
+        shape: 'rect',
+        label: 'paypal'
       },
       createOrder: (data, actions) => {
         return actions.order.create({
@@ -786,10 +891,16 @@ function initInstagramGrowthServices() {
         serviceLabel = 'Instagram Reel Views';
       } else if (activePackage.service === 'likes') {
         serviceLabel = 'Instagram Likes';
+      } else if (activePackage.service === 'yt-subscribers') {
+        serviceLabel = 'YouTube Subscribers';
+      } else if (activePackage.service === 'yt-views') {
+        serviceLabel = 'YouTube Views';
+      } else if (activePackage.service === 'yt-likes') {
+        serviceLabel = 'YouTube Likes';
       }
       const formattedQty = parseInt(activePackage.quantity).toLocaleString('en-IN');
 
-      const waMessage = `Hello! I have placed an order and paid via PayPal:
+      const waMessage = `I am sending you the payment details and the screenshot please proceed with my order soon (PayPal Payment):
 
 📦 Service: ${serviceLabel}
 📈 Quantity: ${formattedQty}
@@ -944,8 +1055,25 @@ Please verify my payment and start the order. Thank you!`;
       e.preventDefault();
 
       const utrVal = utrInput.value.trim();
+
+      // Basic 12-digit format check
       if (!/^\d{12}$/.test(utrVal)) {
         alert('Please enter a valid 12-digit UPI UTR / Transaction ID.');
+        return;
+      }
+
+      // Block obviously fake/dummy UTR patterns
+      const isSequential = (str) => {
+        const asc = "01234567890123456789";
+        const desc = "98765432109876543210";
+        return asc.includes(str) || desc.includes(str);
+      };
+
+      const isAllSameDigits = /^(\d)\1{11}$/.test(utrVal);
+      const isSimpleRepeated = /^(\d{2})\2{5}$/.test(utrVal) || /^(\d{3})\3{3}$/.test(utrVal);
+
+      if (isAllSameDigits || isSequential(utrVal) || isSimpleRepeated) {
+        alert('This UTR number looks incorrect. Please enter the valid 12-digit UPI Transaction ID (UTR) from your payment app receipt.');
         return;
       }
 
@@ -977,10 +1105,16 @@ Please verify my payment and start the order. Thank you!`;
           serviceLabel = 'Instagram Reel Views';
         } else if (activePackage.service === 'likes') {
           serviceLabel = 'Instagram Likes';
+        } else if (activePackage.service === 'yt-subscribers') {
+          serviceLabel = 'YouTube Subscribers';
+        } else if (activePackage.service === 'yt-views') {
+          serviceLabel = 'YouTube Views';
+        } else if (activePackage.service === 'yt-likes') {
+          serviceLabel = 'YouTube Likes';
         }
         const formattedQty = parseInt(activePackage.quantity).toLocaleString('en-IN');
 
-        const waMessage = `Hello! I have placed an order and paid via UPI:
+        const waMessage = `I am sending you the payment details and the screenshot please proceed with my order soon (UPI Payment):
 
 📦 Service: ${serviceLabel}
 📈 Quantity: ${formattedQty}
@@ -1158,6 +1292,9 @@ Please verify my payment and start the order. Thank you!`;
           if (svcName === 'followers') svcName = 'Instagram Followers';
           else if (svcName === 'views') svcName = 'Instagram Reel Views';
           else if (svcName === 'likes') svcName = 'Instagram Likes';
+          else if (svcName === 'yt-subscribers') svcName = 'YouTube Subscribers';
+          else if (svcName === 'yt-views') svcName = 'YouTube Views';
+          else if (svcName === 'yt-likes') svcName = 'YouTube Likes';
           resService.textContent = svcName;
         }
         if (resQty) resQty.textContent = Number(order.quantity).toLocaleString('en-IN');
@@ -1238,8 +1375,8 @@ function initServiceCardsClick() {
   const cardFilters = {
     'service-video-editing': 'btn-filter-video',
     'service-video-prod': 'btn-filter-video',
-    'service-content-creation': 'btn-filter-travel',
-    'service-web-dev': 'btn-filter-all',
+    'service-content-creation': 'btn-filter-website',
+    'service-web-dev': 'btn-filter-website',
     'service-thumb-creation': 'btn-filter-vfx',
     'service-cgi-ads': 'btn-filter-cgi'
   };
@@ -1434,7 +1571,7 @@ function initDynamicReviewsAndTestimonialsSlider() {
   const renderReviewCard = (rev, idx) => {
     const cardId = `user-review-${idx}`;
     const initials = rev.name.trim().split(/\s+/).map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'U';
-    
+
     let starsHtml = '';
     const ratingVal = parseInt(rev.rating, 10) || 5;
     for (let s = 0; s < ratingVal; s++) {
@@ -1605,7 +1742,7 @@ function initWriteReviewSystem() {
         let localReviews = [];
         try {
           localReviews = JSON.parse(localStorage.getItem('frame_builders_reviews')) || [];
-        } catch (e) {}
+        } catch (e) { }
 
         localReviews.push({
           name: nameVal,
@@ -1664,5 +1801,157 @@ function initWriteReviewSystem() {
     });
   }
 }
+
+/* ==========================================================================
+   17. Portfolio VFX 3D Card Stack Slider (Swipe & Navigation supported)
+   ========================================================================== */
+function initPortfolioVFXStack() {
+  const stack = document.getElementById('vfx-portfolio-card-stack');
+  const cards = document.querySelectorAll('.portfolio-vfx-card');
+  const btnPrev = document.getElementById('vfx-stack-prev-btn');
+  const btnNext = document.getElementById('vfx-stack-next-btn');
+  const dotsContainer = document.getElementById('vfx-stack-dots-container');
+
+  if (!stack || cards.length === 0) return;
+
+  let currentIndex = 0;
+  const cardCount = cards.length;
+  let isDragging = false;
+  let startX = 0;
+  let currentX = 0;
+  let dragCard = null;
+
+  // Generate navigation indicator dots
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < cardCount; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('stack-dot');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => {
+      currentIndex = i;
+      updateStack();
+    });
+    dotsContainer.appendChild(dot);
+  }
+
+  const dots = dotsContainer.querySelectorAll('.stack-dot');
+
+  // Update layout and 3D transforms for cards
+  const updateStack = () => {
+    cards.forEach((card, idx) => {
+      // Calculate relative index relative to active card
+      let relIdx = (idx - currentIndex + cardCount) % cardCount;
+
+      // Clear inline transform & opacity styles so CSS styles can take over
+      card.style.transform = '';
+      card.style.opacity = '';
+
+      // Clear existing position classes
+      card.classList.remove('stack-pos-0', 'stack-pos-1', 'stack-pos-2', 'stack-hidden');
+
+      // Assign position classes
+      if (relIdx === 0) {
+        card.classList.add('stack-pos-0');
+      } else if (relIdx === 1) {
+        card.classList.add('stack-pos-1');
+      } else if (relIdx === 2) {
+        card.classList.add('stack-pos-2');
+      } else {
+        card.classList.add('stack-hidden');
+      }
+    });
+
+    // Update dots indicator active class
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentIndex);
+    });
+  };
+
+  // Click controls
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % cardCount;
+      updateStack();
+    });
+  }
+
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + cardCount) % cardCount;
+      updateStack();
+    });
+  }
+
+  // Swipe/Drag Event Handlers
+  const handleDragStart = (e) => {
+    // Only allow dragging on top card
+    dragCard = cards[currentIndex];
+    if (!dragCard) return;
+
+    isDragging = true;
+    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+    currentX = startX;
+    dragCard.classList.add('dragging');
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging || !dragCard) return;
+
+    currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    let deltaX = currentX - startX;
+
+    // Stop scrolling page on mobile when swiping
+    if (e.cancelable) e.preventDefault();
+
+    // Rotate slightly during drag
+    let rotate = deltaX * 0.08;
+    dragCard.style.transform = `translate3d(${deltaX}px, 0, 0) rotate(${rotate}deg)`;
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging || !dragCard) return;
+
+    isDragging = false;
+    dragCard.classList.remove('dragging');
+
+    let deltaX = currentX - startX;
+    let threshold = 120; // swipe threshold in px
+
+    if (Math.abs(deltaX) > threshold) {
+      // Swipe out left or right
+      let direction = deltaX > 0 ? 1 : -1;
+
+      dragCard.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+      dragCard.style.transform = `translate3d(${direction * 600}px, 0, 0) rotate(${direction * 30}deg)`;
+      dragCard.style.opacity = '0';
+
+      const swipedCard = dragCard;
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % cardCount;
+        swipedCard.style.transition = '';
+        updateStack();
+      }, 300);
+    } else {
+      // Snap back
+      updateStack();
+    }
+
+    dragCard = null;
+  };
+
+  // Mouse drag events
+  stack.addEventListener('mousedown', handleDragStart);
+  document.addEventListener('mousemove', handleDragMove);
+  document.addEventListener('mouseup', handleDragEnd);
+
+  // Touch drag events
+  stack.addEventListener('touchstart', handleDragStart, { passive: true });
+  document.addEventListener('touchmove', handleDragMove, { passive: false });
+  document.addEventListener('touchend', handleDragEnd);
+
+  // Initial layout render
+  updateStack();
+}
+
 
 
