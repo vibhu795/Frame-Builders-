@@ -158,6 +158,18 @@
             <div class="spline-loader" id="spline-loader">
               <div class="spinner"></div>
             </div>
+            <!-- Pure CSS Glowing Sphere Fallback -->
+            <div class="interactive-3d-core" id="css-fallback-core" style="display: none;">
+              <div class="core-glowing-sphere"></div>
+              <div class="core-grid-mesh"></div>
+              <div class="core-ring core-ring-1">
+                <div class="core-node core-node-1"></div>
+              </div>
+              <div class="core-ring core-ring-2">
+                <div class="core-node core-node-2"></div>
+              </div>
+              <div class="core-ring core-ring-3"></div>
+            </div>
             <canvas id="canvas3d"
               style="width: 100%; height: 100%; border-radius: 24px; opacity: 0; transition: opacity 0.5s; display: block;"></canvas>
           </div>
@@ -658,7 +670,7 @@
           <div class="portfolio-card reveal" data-category="cgi" id="port-thumb-ganesha">
             <div class="portfolio-img-container vertical-ratio">
               <video src="assets/projects/lord-ganesha-vfx.mp4" class="portfolio-img" loop muted playsinline
-                preload="auto"></video>
+                preload="metadata"></video>
               <div class="portfolio-overlay"></div>
             </div>
             <div class="portfolio-content">
@@ -1350,23 +1362,47 @@
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
   <script src="js/main.js"></script>
   <script type="module">
-    import { Application } from 'https://esm.sh/@splinetool/runtime';
-
     const canvas = document.getElementById('canvas3d');
     const loader = document.getElementById('spline-loader');
+    const fallbackCore = document.getElementById('css-fallback-core');
 
-    if (canvas && loader) {
-      const spline = new Application(canvas);
-      spline.load('https://prod.spline.design/AJTgy96tcZMH8nMh/scene.splinecode')
-        .then(() => {
-          loader.style.opacity = '0';
-          setTimeout(() => {
-            loader.style.display = 'none';
-            canvas.style.opacity = '1';
-          }, 500);
+    function showFallback() {
+      if (loader) loader.style.display = 'none';
+      if (canvas) canvas.style.display = 'none';
+      if (fallbackCore) fallbackCore.style.display = 'block';
+    }
+
+    // Performance mobile check
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // Bypass Spline completely on mobile devices
+      showFallback();
+    } else {
+      // Lazy load Spline only on desktop/tablets when parser finishes
+      import('https://esm.sh/@splinetool/runtime')
+        .then(({ Application }) => {
+          if (canvas && loader) {
+            const spline = new Application(canvas);
+            spline.load('https://prod.spline.design/AJTgy96tcZMH8nMh/scene.splinecode')
+              .then(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                  loader.style.display = 'none';
+                  canvas.style.opacity = '1';
+                }, 500);
+              })
+              .catch((err) => {
+                console.error('Error loading Spline scene:', err);
+                showFallback();
+              });
+          } else {
+            showFallback();
+          }
         })
         .catch((err) => {
-          console.error('Error loading Spline scene:', err);
+          console.error('Error importing Spline runtime:', err);
+          showFallback();
         });
     }
   </script>

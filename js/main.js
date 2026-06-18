@@ -561,16 +561,39 @@ function initPortfolioVideos() {
     const video = card.querySelector('video');
     if (!video) return;
 
-    // Play on hover
+    // Play on hover (desktop only)
     card.addEventListener('mouseenter', () => {
-      video.play().catch(err => {
-        console.log('Video play blocked or interrupted:', err);
-      });
+      if (window.innerWidth >= 768) {
+        video.play().catch(err => {
+          console.log('Video play blocked or interrupted:', err);
+        });
+      }
     });
 
-    // Pause on mouse leave
+    // Pause on mouse leave (desktop only)
     card.addEventListener('mouseleave', () => {
-      video.pause();
+      if (window.innerWidth >= 768) {
+        video.pause();
+      }
+    });
+
+    // Toggle play/pause on click/tap (mobile and desktop manual click)
+    card.addEventListener('click', (e) => {
+      // If the click is inside a link, let the browser handle navigation
+      if (e.target.closest('a')) return;
+
+      if (video.paused) {
+        // Pause all other portfolio videos first
+        document.querySelectorAll('.portfolio-card video').forEach(v => {
+          if (v !== video) v.pause();
+        });
+        
+        video.play().catch(err => {
+          console.log('Video play blocked on click:', err);
+        });
+      } else {
+        video.pause();
+      }
     });
   });
 }

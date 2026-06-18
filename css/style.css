@@ -24,8 +24,8 @@
   /* Borders & Glass */
   --border-color: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.18);
-  --glass-bg: rgba(14, 19, 37, 0.7);
-  --glass-blur: blur(16px);
+  --glass-bg: rgba(10, 15, 30, 0.92);
+  --glass-blur: none;
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -245,7 +245,8 @@ header {
 
 header.scrolled {
   background-color: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-color);
   padding: 16px 0;
 }
@@ -812,9 +813,7 @@ header.scrolled {
   opacity: 0.95;
   z-index: 2;
   pointer-events: none;
-  background: rgba(14, 19, 37, 0.45);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(14, 19, 37, 0.92);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(30, 102, 255, 0.03);
 }
@@ -825,9 +824,7 @@ header.scrolled {
   opacity: 0.85;
   z-index: 1;
   pointer-events: none;
-  background: rgba(14, 19, 37, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(14, 19, 37, 0.85);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(30, 102, 255, 0.02);
 }
@@ -1338,9 +1335,7 @@ header.scrolled {
   opacity: 0.95;
   z-index: 2;
   pointer-events: none;
-  background: rgba(14, 19, 37, 0.455);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(14, 19, 37, 0.92);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(30, 102, 255, 0.03);
 }
@@ -1351,9 +1346,7 @@ header.scrolled {
   opacity: 0.85;
   z-index: 1;
   pointer-events: none;
-  background: rgba(14, 19, 37, 0.255);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(14, 19, 37, 0.85);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(30, 102, 255, 0.02);
 }
@@ -3000,4 +2993,15 @@ footer {
   stroke: currentColor;
   stroke-width: 2px;
   fill: none;
+}
+
+/* Performance Optimizations - content-visibility off-screen */
+#services,
+#why-choose,
+#portfolio,
+#process,
+#stats,
+#testimonials {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
 }
