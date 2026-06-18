@@ -419,6 +419,14 @@ function initTestimonialsSlider() {
     startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
     currentX = startX;
     dragCard.classList.add('dragging');
+
+    if (e.type === 'touchstart') {
+      stack.addEventListener('touchmove', handleDragMove, { passive: false });
+      document.addEventListener('touchend', handleDragEnd);
+    } else {
+      document.addEventListener('mousemove', handleDragMove);
+      document.addEventListener('mouseup', handleDragEnd);
+    }
   };
 
   const handleDragMove = (e) => {
@@ -440,6 +448,12 @@ function initTestimonialsSlider() {
 
     isDragging = false;
     dragCard.classList.remove('dragging');
+
+    // Remove drag listeners
+    stack.removeEventListener('touchmove', handleDragMove);
+    document.removeEventListener('touchend', handleDragEnd);
+    document.removeEventListener('mousemove', handleDragMove);
+    document.removeEventListener('mouseup', handleDragEnd);
 
     let deltaX = currentX - startX;
     let threshold = 120; // swipe threshold in px
@@ -470,13 +484,9 @@ function initTestimonialsSlider() {
 
   // Mouse drag events
   stack.addEventListener('mousedown', handleDragStart);
-  document.addEventListener('mousemove', handleDragMove);
-  document.addEventListener('mouseup', handleDragEnd);
 
   // Touch drag events
   stack.addEventListener('touchstart', handleDragStart, { passive: true });
-  document.addEventListener('touchmove', handleDragMove, { passive: false });
-  document.addEventListener('touchend', handleDragEnd);
 
   // Autoplay functionality
   const startAutoplay = () => {
@@ -728,6 +738,14 @@ function initWhyChooseStack() {
     startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
     currentX = startX;
     dragCard.classList.add('dragging');
+
+    if (e.type === 'touchstart') {
+      stack.addEventListener('touchmove', handleDragMove, { passive: false });
+      document.addEventListener('touchend', handleDragEnd);
+    } else {
+      document.addEventListener('mousemove', handleDragMove);
+      document.addEventListener('mouseup', handleDragEnd);
+    }
   };
 
   const handleDragMove = (e) => {
@@ -749,6 +767,12 @@ function initWhyChooseStack() {
 
     isDragging = false;
     dragCard.classList.remove('dragging');
+
+    // Remove drag listeners
+    stack.removeEventListener('touchmove', handleDragMove);
+    document.removeEventListener('touchend', handleDragEnd);
+    document.removeEventListener('mousemove', handleDragMove);
+    document.removeEventListener('mouseup', handleDragEnd);
 
     let deltaX = currentX - startX;
     let threshold = 120; // swipe threshold in px
@@ -777,13 +801,9 @@ function initWhyChooseStack() {
 
   // Mouse drag events
   stack.addEventListener('mousedown', handleDragStart);
-  document.addEventListener('mousemove', handleDragMove);
-  document.addEventListener('mouseup', handleDragEnd);
 
   // Touch drag events
   stack.addEventListener('touchstart', handleDragStart, { passive: true });
-  document.addEventListener('touchmove', handleDragMove, { passive: false });
-  document.addEventListener('touchend', handleDragEnd);
 
   // Initial layout render
   updateStack();
@@ -1124,6 +1144,14 @@ function initPortfolioVFXStack() {
     startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
     currentX = startX;
     dragCard.classList.add('dragging');
+
+    if (e.type === 'touchstart') {
+      stack.addEventListener('touchmove', handleDragMove, { passive: false });
+      document.addEventListener('touchend', handleDragEnd);
+    } else {
+      document.addEventListener('mousemove', handleDragMove);
+      document.addEventListener('mouseup', handleDragEnd);
+    }
   };
 
   const handleDragMove = (e) => {
@@ -1145,6 +1173,12 @@ function initPortfolioVFXStack() {
 
     isDragging = false;
     dragCard.classList.remove('dragging');
+
+    // Remove drag listeners
+    stack.removeEventListener('touchmove', handleDragMove);
+    document.removeEventListener('touchend', handleDragEnd);
+    document.removeEventListener('mousemove', handleDragMove);
+    document.removeEventListener('mouseup', handleDragEnd);
 
     let deltaX = currentX - startX;
     let threshold = 120; // swipe threshold in px
@@ -1173,13 +1207,9 @@ function initPortfolioVFXStack() {
 
   // Mouse drag events
   stack.addEventListener('mousedown', handleDragStart);
-  document.addEventListener('mousemove', handleDragMove);
-  document.addEventListener('mouseup', handleDragEnd);
 
   // Touch drag events
   stack.addEventListener('touchstart', handleDragStart, { passive: true });
-  document.addEventListener('touchmove', handleDragMove, { passive: false });
-  document.addEventListener('touchend', handleDragEnd);
 
   // Initial layout render
   updateStack();
