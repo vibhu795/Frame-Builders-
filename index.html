@@ -1365,32 +1365,60 @@
     const canvas = document.getElementById('canvas3d');
     const loader = document.getElementById('spline-loader');
     const fallbackCore = document.getElementById('css-fallback-core');
+    const container = document.getElementById('hero-interactive-canvas');
+
+    let splineApp = null;
+    let splineLoaded = false;
 
     function showFallback() {
       if (loader) loader.style.display = 'none';
       if (canvas) canvas.style.display = 'none';
-      if (fallbackCore) fallbackCore.style.display = 'block';
+      if (fallbackCore) {
+        fallbackCore.style.display = 'block';
+        fallbackCore.style.opacity = '1';
+      }
     }
 
-    // Performance mobile check
-    const isMobile = window.innerWidth < 768;
+    // Instantly display CSS fallback to keep load times instantaneous
+    if (fallbackCore) {
+      fallbackCore.style.display = 'block';
+      fallbackCore.style.opacity = '1';
+    }
+    if (loader) loader.style.display = 'none';
 
-    if (isMobile) {
-      // Bypass Spline completely on mobile devices
-      showFallback();
-    } else {
-      // Lazy load Spline only on desktop/tablets when parser finishes
+    // Lazy load the heavy Spline JS engine in the background after page loads
+    setTimeout(() => {
       import('https://esm.sh/@splinetool/runtime')
         .then(({ Application }) => {
-          if (canvas && loader) {
-            const spline = new Application(canvas);
-            spline.load('https://prod.spline.design/AJTgy96tcZMH8nMh/scene.splinecode')
+          if (canvas) {
+            // Briefly show small spinner inside fallback if loading is taking time
+            if (loader) {
+              loader.style.display = 'flex';
+              loader.style.opacity = '1';
+            }
+
+            splineApp = new Application(canvas);
+            splineApp.load('https://prod.spline.design/AJTgy96tcZMH8nMh/scene.splinecode')
               .then(() => {
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                  loader.style.display = 'none';
-                  canvas.style.opacity = '1';
-                }, 500);
+                splineLoaded = true;
+
+                // Smoothly fade out fallback and fade in 3D canvas
+                if (fallbackCore) {
+                  fallbackCore.style.transition = 'opacity 0.5s ease';
+                  fallbackCore.style.opacity = '0';
+                  setTimeout(() => {
+                    fallbackCore.style.display = 'none';
+                  }, 500);
+                }
+
+                if (loader) {
+                  loader.style.opacity = '0';
+                  setTimeout(() => {
+                    loader.style.display = 'none';
+                  }, 500);
+                }
+
+                canvas.style.opacity = '1';
               })
               .catch((err) => {
                 console.error('Error loading Spline scene:', err);
@@ -1404,6 +1432,23 @@
           console.error('Error importing Spline runtime:', err);
           showFallback();
         });
+    }, 1500); // 1.5 second delay to let main page resources fully load first
+
+    // Throttling: Turn off WebGL compositing when container goes off-screen to prevent scroll lagging
+    if (canvas) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (splineLoaded) {
+              canvas.style.display = 'block';
+            }
+          } else {
+            canvas.style.display = 'none';
+          }
+        });
+      }, { threshold: 0 });
+
+      observer.observe(container);
     }
   </script>
 </body>
