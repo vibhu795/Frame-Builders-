@@ -2995,13 +2995,304 @@ footer {
   fill: none;
 }
 
+/* ==========================================================================
+   14. About Us Section (Founders Stack)
+   ========================================================================== */
+#about {
+  padding: var(--section-padding) 0;
+  position: relative;
+  background-color: var(--bg-primary);
+}
+
+.about-stack-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.about-stack {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  margin-bottom: 50px;
+  transform-style: preserve-3d;
+}
+
+.about-card.stack-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: grab;
+  user-select: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(30, 102, 255, 0.05);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color var(--transition-smooth), background var(--transition-smooth);
+}
+
+.about-card.stack-card:active {
+  cursor: grabbing;
+}
+
+.about-card.stack-card.dragging {
+  transition: none;
+}
+
+/* Stack Card Position States */
+.about-card.stack-card.stack-pos-0 {
+  transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  opacity: 1;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+/* Active Founder Card Hover Pop */
+.about-card.stack-card.stack-pos-0:hover {
+  transform: translate3d(0, -14px, 30px) scale(1.03) rotate(0deg);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 45px rgba(124, 58, 237, 0.2);
+  border-color: var(--purple-premium);
+  background: var(--bg-secondary);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+/* Underneath Founder Card */
+.about-card.stack-card.stack-pos-1 {
+  transform: translate3d(0, 16px, -20px) scale(0.96) rotate(1.5deg);
+  opacity: 0.95;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(14, 19, 37, 0.92);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(30, 102, 255, 0.03);
+}
+
+.about-card.stack-card.stack-hidden {
+  transform: translate3d(0, 32px, -40px) scale(0.92) rotate(0deg);
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.about-member-img {
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.about-avatar-placeholder {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -1px;
+}
+
+.about-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-role {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--blue-electric);
+  margin-bottom: 4px;
+}
+
+.about-card-content h3 {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.about-card-content p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .about-stack {
+    height: 280px;
+  }
+  .about-card.stack-card {
+    padding: 24px;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-stack {
+    height: 310px;
+  }
+}
+
+/* ==========================================================================
+   15. Contact Section (WhatsApp Redirects)
+   ========================================================================== */
+#contact {
+  padding: var(--section-padding) 0;
+  position: relative;
+  background-color: rgba(14, 19, 37, 0.4);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.contact-box-wrapper {
+  width: 100%;
+  max-width: 640px;
+  margin: 40px auto 0 auto;
+  position: relative;
+}
+
+.contact-card-box {
+  background: var(--glass-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  backdrop-filter: var(--glass-blur);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.contact-card-box:hover {
+  border-color: rgba(37, 211, 102, 0.4);
+  box-shadow: 0 25px 60px rgba(37, 211, 102, 0.08), 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.contact-box-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.whatsapp-box-icon {
+  width: 64px;
+  height: 64px;
+  color: #25d366;
+  filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));
+}
+
+.contact-box-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.whatsapp-numbers-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.whatsapp-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.whatsapp-flag {
+  font-size: 1.4rem;
+}
+
+.whatsapp-phone-num {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.whatsapp-btn-tag {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #25D366;
+  background: rgba(37, 211, 102, 0.1);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  transition: all 0.3s ease;
+}
+
+.whatsapp-link-btn:hover {
+  background: rgba(37, 211, 102, 0.05);
+  border-color: #25d366;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.15);
+}
+
+.whatsapp-link-btn:hover .whatsapp-btn-tag {
+  background: #25D366;
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+}
+
+@media (max-width: 580px) {
+  .whatsapp-link-btn {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding: 20px;
+  }
+}
+
 /* Performance Optimizations - content-visibility off-screen */
 #services,
 #why-choose,
+#about,
 #portfolio,
 #process,
 #stats,
-#testimonials {
+#testimonials,
+#contact {
   content-visibility: auto;
   contain-intrinsic-size: 800px;
 }

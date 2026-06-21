@@ -79,6 +79,7 @@
           <li><a href="#hero" class="nav-link active" id="link-hero">Home</a></li>
           <li><a href="#services" class="nav-link" id="link-services">Services</a></li>
           <li><a href="#why-choose" class="nav-link" id="link-why-choose">Why Us</a></li>
+          <li><a href="#about" class="nav-link" id="link-about">About</a></li>
           <li><a href="#portfolio" class="nav-link" id="link-portfolio">Work</a></li>
           <li><a href="#process" class="nav-link" id="link-process">Process</a></li>
           <li><a href="#testimonials" class="nav-link" id="link-testimonials">Reviews</a></li>
@@ -89,7 +90,7 @@
 
       <!-- Action buttons / Mobile toggles -->
       <div class="nav-cta">
-        <a href="#cta" class="btn btn-secondary" id="btn-header-cta">Get in Touch</a>
+        <a href="#contact" class="btn btn-secondary" id="btn-header-cta">Get in Touch</a>
       </div>
 
       <button class="nav-toggle" id="btn-mobile-toggle" aria-label="Toggle Mobile Menu" aria-controls="nav-menu-list">
@@ -401,6 +402,64 @@
             </button>
             <div class="stack-dots" id="stack-dots-container"></div>
             <button class="slider-btn next" id="stack-next-btn" aria-label="Next Reason">
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         3.5. ABOUT US (Founders)
+         ========================================================================== -->
+    <section id="about">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <span class="section-tag">Leadership</span>
+          <h2 class="section-title">Meet The Founders</h2>
+          <p class="section-desc">The driving force behind Frame Builders, pushing the boundaries of CGI, content, and development.</p>
+        </div>
+
+        <div class="about-stack-wrapper reveal">
+          <div class="about-stack" id="about-card-stack">
+            <!-- Card 1: Founder -->
+            <div class="about-card stack-card" id="about-founder">
+              <div class="about-member-img">
+                <div class="about-avatar-placeholder">AVS</div>
+              </div>
+              <div class="about-card-content">
+                <span class="about-role">Founder</span>
+                <h3>Adarsh Vikram Singh</h3>
+                <p>Leading the agency's creative direction, visual branding, and operations to deliver state-of-the-art experiences.</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Co-Founder -->
+            <div class="about-card stack-card" id="about-cofounder">
+              <div class="about-member-img">
+                <div class="about-avatar-placeholder">VJ</div>
+              </div>
+              <div class="about-card-content">
+                <span class="about-role">Co-Founder</span>
+                <h3>Vaibhav Jain</h3>
+                <p>Heading technology architectures, system designs, integrations, and performance engineering solutions.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stack Controls -->
+          <div class="stack-controls">
+            <button class="slider-btn prev" id="about-prev-btn" aria-label="Previous Founder">
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <div class="stack-dots" id="about-dots-container"></div>
+            <button class="slider-btn next" id="about-next-btn" aria-label="Next Founder">
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -1163,6 +1222,42 @@
       </div>
     </section>
 
+    <!-- ==========================================================================
+         8.5. CONTACT SECTION
+         ========================================================================== -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <span class="section-tag">Contact</span>
+          <h2 class="section-title">Let's Connect</h2>
+          <p class="section-desc">Have a project in mind or need quick assistance? Reach out directly via WhatsApp for instant communication.</p>
+        </div>
+
+        <div class="contact-box-wrapper reveal">
+          <div class="contact-card-box">
+            <div class="contact-box-header">
+              <svg class="whatsapp-box-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.005 5.234 5.34.003 11.892 0C15.065.001 18.04 1.24 20.28 3.487c2.24 2.246 3.472 5.224 3.47 8.397-.004 6.643-5.338 11.87-11.891 11.87-1.996-.001-3.955-.5-5.698-1.448L0 24zm6.59-4.846c1.657.985 3.31 1.489 5.244 1.49 5.362-.004 9.722-4.227 9.724-9.412.002-2.512-.975-4.87-2.755-6.653C17.07 2.795 14.7 1.82 12.186 1.819c-5.363 0-9.724 4.225-9.728 9.411-.001 1.86.5 3.669 1.455 5.28l-.994 3.634 3.728-.97zM18.067 14.7c-.29-.145-1.72-.85-1.985-.947-.267-.098-.46-.145-.655.146-.195.29-.755.946-.925 1.14-.17.195-.34.22-.63.074-.29-.145-1.226-.452-2.337-1.444-.863-.77-1.447-1.722-1.616-2.013-.17-.29-.018-.447.127-.59.13-.13.29-.34.435-.51.145-.17.193-.29.29-.485.097-.195.048-.364-.025-.51-.07-.145-.656-1.58-.9-2.164-.236-.57-.478-.492-.656-.501-.17-.008-.365-.01-.56-.01-.196 0-.514.073-.782.364-.268.29-1.023 1.002-1.023 2.443s1.048 2.833 1.194 3.027c.145.195 2.062 3.149 4.996 4.417.698.302 1.243.482 1.668.618.702.223 1.34.191 1.845.116.563-.083 1.72-.702 1.962-1.38.243-.678.243-1.26.17-1.38-.073-.12-.267-.194-.557-.34z"/>
+              </svg>
+              <h3>Direct WhatsApp Chat</h3>
+            </div>
+            <div class="whatsapp-numbers-container">
+              <a href="https://wa.me/917009492427" target="_blank" rel="noopener noreferrer" class="whatsapp-link-btn" id="contact-whatsapp-india">
+                <span class="whatsapp-flag">🇮🇳</span>
+                <span class="whatsapp-phone-num">+91 7009492427</span>
+                <span class="whatsapp-btn-tag">Chat Now</span>
+              </a>
+              <a href="https://wa.me/35796989543" target="_blank" rel="noopener noreferrer" class="whatsapp-link-btn" id="contact-whatsapp-cyprus">
+                <span class="whatsapp-flag">🇨🇾</span>
+                <span class="whatsapp-phone-num">+357 96 989543</span>
+                <span class="whatsapp-btn-tag">Chat Now</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- ==========================================================================
@@ -1223,9 +1318,9 @@
       <div class="footer-column" id="footer-col-company">
         <h4>Company</h4>
         <ul class="footer-links">
-          <li><a href="#why-choose" class="footer-link" id="foot-link-about">About Us</a></li>
+          <li><a href="#about" class="footer-link" id="foot-link-about">About Us</a></li>
           <li><a href="#portfolio" class="footer-link" id="foot-link-portfolio">Portfolio</a></li>
-          <li><a href="#cta" class="footer-link" id="foot-link-contact">Contact</a></li>
+          <li><a href="#contact" class="footer-link" id="foot-link-contact">Contact</a></li>
           <li><a href="https://wa.me/918146065407?text=Hey%20there%20i%20have%20a%20query%20please%20help%20me%20out" class="footer-link" id="foot-link-support" target="_blank" rel="noopener noreferrer">Help & Support</a></li>
         </ul>
       </div>
