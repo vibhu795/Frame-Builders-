@@ -1529,6 +1529,49 @@
   </div>
 
   <!-- Scripts -->
+  <!-- Vapi Voice Assistant Integration -->
+  <script>
+    var vapiInstance = null;
+    const assistantId = "b39120fb-51cc-4b87-99c9-1569d14b85ed";
+    const apiKey = "388f0440-9065-4a20-a74b-f0445ede0a51";
+    
+    const buttonConfig = {
+      position: "bottom-right",
+      offset: "40px",
+      width: "56px",
+      height: "56px",
+      idle: {
+        color: "#7c3aed",
+        type: "pill",
+        title: "Talk to our assistant",
+        subtitle: "Have a quick question?",
+        icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone.svg"
+      },
+      loading: {
+        color: "#1e66ff"
+      },
+      active: {
+        color: "#ef4444"
+      }
+    };
+
+    (function (d, t) {
+      var g = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+      g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.defer = true;
+      g.async = true;
+      s.parentNode.insertBefore(g, s);
+      g.onload = function () {
+        vapiInstance = window.vapiSDK.run({
+          apiKey: apiKey,
+          assistant: assistantId,
+          config: buttonConfig,
+        });
+      };
+    })(document, "script");
+  </script>
+
   <!-- Calendly widget JS -->
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
   <script src="js/main.js"></script>
