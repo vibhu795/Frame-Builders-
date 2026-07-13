@@ -494,6 +494,20 @@
 
         <!-- Portfolio Items Grid -->
         <div class="portfolio-grid">
+          <!-- Project: Prison Escape Thumbnail -->
+          <div class="portfolio-card reveal" data-category="vfx" id="port-thumb-escape">
+            <div class="portfolio-img-container">
+              <img src="assets/projects/prison-escape-thumbnail.png" alt="Prison Escape IRL: Golden Spoon Survival YouTube Thumbnail"
+                class="portfolio-img" loading="lazy">
+              <div class="portfolio-overlay"></div>
+            </div>
+            <div class="portfolio-content">
+              <span class="portfolio-cat">Clickbait Thumbnail</span>
+              <h3 class="portfolio-title">Prison Escape IRL (Golden Spoon Survival)</h3>
+              <p class="portfolio-desc">A high-impact survival challenge thumbnail detailing custom character grading, a dramatic Concrete-room background, and a glowing golden spoon.</p>
+            </div>
+          </div>
+
           <!-- Project: Goodbye Adobe Thumbnail -->
           <div class="portfolio-card reveal" data-category="vfx" id="port-thumb-adobe">
             <div class="portfolio-img-container">
@@ -873,6 +887,19 @@
         <!-- Swipable Portfolio VFX Stack (Shown only when 'vfx' filter is active) -->
         <div class="portfolio-vfx-stack-wrapper reveal" id="vfx-portfolio-slider" style="display: none;">
           <div class="portfolio-vfx-stack" id="vfx-portfolio-card-stack">
+            <!-- Card: Prison Escape Thumbnail -->
+            <div class="portfolio-vfx-card" id="stack-vfx-escape">
+              <div class="portfolio-img-container">
+                <img src="assets/projects/prison-escape-thumbnail.png" alt="Prison Escape IRL: Golden Spoon Survival YouTube Thumbnail" class="portfolio-img" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-content">
+                <span class="portfolio-cat">Clickbait Thumbnail</span>
+                <h3 class="portfolio-title">Prison Escape IRL (Golden Spoon Survival)</h3>
+                <p class="portfolio-desc">A high-impact survival challenge thumbnail detailing custom character grading, a dramatic Concrete-room background, and a glowing golden spoon.</p>
+              </div>
+            </div>
+
             <!-- Card: Goodbye Adobe Thumbnail -->
             <div class="portfolio-vfx-card" id="stack-vfx-adobe">
               <div class="portfolio-img-container">
@@ -1535,23 +1562,28 @@
     const assistantId = "b39120fb-51cc-4b87-99c9-1569d14b85ed";
     const apiKey = "388f0440-9065-4a20-a74b-f0445ede0a51";
     
+    // Check if the user is on a mobile viewport
+    const isMobile = window.innerWidth < 768;
+    
     const buttonConfig = {
       position: "bottom-right",
-      offset: "40px",
-      width: "56px",
-      height: "56px",
+      offset: isMobile ? "20px" : "40px",
+      width: isMobile ? "48px" : "56px",
+      height: isMobile ? "48px" : "56px",
       idle: {
         color: "#7c3aed",
-        type: "pill",
+        type: isMobile ? "round" : "pill", // Circular on mobile, pill on desktop
         title: "Talk to our assistant",
         subtitle: "Have a quick question?",
         icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone.svg"
       },
       loading: {
-        color: "#1e66ff"
+        color: "#1e66ff",
+        type: isMobile ? "round" : "pill"
       },
       active: {
-        color: "#ef4444"
+        color: "#ef4444",
+        type: isMobile ? "round" : "pill"
       }
     };
 

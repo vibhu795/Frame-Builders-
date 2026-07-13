@@ -3296,3 +3296,42 @@ footer {
   content-visibility: auto;
   contain-intrinsic-size: 800px;
 }
+
+/* Vapi Assistant Widget Custom Styling & Mobile Responsiveness */
+.vapi-btn {
+  z-index: 99999 !important;
+}
+
+@media (max-width: 768px) {
+  /* Force widget positioning and dimensions */
+  .vapi-btn {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Hide pill-specific text and descriptions to make it circular and compact */
+  .vapi-btn-pill span,
+  .vapi-btn-pill p,
+  .vapi-btn-pill div:not(.vapi-btn-icon) {
+    display: none !important;
+  }
+
+  /* Center the icon inside the circular button */
+  .vapi-btn-icon {
+    margin: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
