@@ -4,7 +4,7 @@
  */
 
 // Configuration
-const CALENDLY_URL = 'https://calendly.com/framebuilders/30min';
+const CALENDLY_URL = 'https://calendly.com/framebuilders/60min';
 const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyk7Fv8074ZQVY_-9JGgoNjnBkIhDpgOdDw8L_KjPdLhiXb2Jdb3A3DObntmNvC2iO7/exec";
 const PAYEE_UPI_ID = "vaibhavjain7890@okaxis";
 const PAYEE_NAME = "Frame Builders";
@@ -598,7 +598,7 @@ function initPortfolioVideos() {
         document.querySelectorAll('.portfolio-card video').forEach(v => {
           if (v !== video) v.pause();
         });
-        
+
         video.play().catch(err => {
           console.log('Video play blocked on click:', err);
         });
