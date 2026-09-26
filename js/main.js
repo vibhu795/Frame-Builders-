@@ -17,14 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
   init3DParallax();
   initSpotlightEffect();
   initPortfolioFilter();
-  initStatsCounter();
   initCustomReviewsBox();
   initScrollReveal();
   initCalendly();
   initPortfolioVideos();
   initServiceCardsClick();
   initWhyChooseStack();
-  initAboutStack();
   initPortfolioVFXStack();
 });
 
@@ -268,60 +266,7 @@ function initPortfolioFilter() {
   }
 }
 
-/* ==========================================================================
-   6. Intersection Observer Stats Counter
-   ========================================================================== */
-function initStatsCounter() {
-  const stats = document.querySelectorAll('.stat-number');
 
-  if (stats.length === 0) return;
-
-  const countUp = (element) => {
-    const target = parseFloat(element.getAttribute('data-count'));
-    const decimals = parseInt(element.getAttribute('data-decimals') || '0', 10);
-    const duration = 2000; // 2 seconds
-    const suffix = element.getAttribute('data-suffix') || '';
-    const prefix = element.getAttribute('data-prefix') || '';
-    let startTimestamp = null;
-
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-
-      // Easing out quadratic function
-      const easeProgress = progress * (2 - progress);
-      const currentVal = (easeProgress * target).toFixed(decimals);
-
-      element.textContent = `${prefix}${currentVal}${suffix}`;
-
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      } else {
-        element.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
-      }
-    };
-
-    window.requestAnimationFrame(step);
-  };
-
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px'
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        countUp(entry.target);
-        observer.unobserve(entry.target); // Trigger count animation once only
-      }
-    });
-  }, observerOptions);
-
-  stats.forEach(stat => {
-    observer.observe(stat);
-  });
-}
 
 
 
@@ -1105,172 +1050,5 @@ function initPortfolioVFXStack() {
   // Initial layout render
   updateStack();
 }
-
-/* ==========================================================================
-   13. About Us Founders Stack (Swipe & Navigation supported)
-   ========================================================================== */
-function initAboutStack() {
-  const stack = document.getElementById('about-card-stack');
-  const cards = document.querySelectorAll('.about-card.stack-card');
-  const btnPrev = document.getElementById('about-prev-btn');
-  const btnNext = document.getElementById('about-next-btn');
-  const dotsContainer = document.getElementById('about-dots-container');
-
-  if (!stack || cards.length === 0) return;
-
-  if (cards.length <= 1) {
-    cards[0].classList.add('stack-pos-0');
-    return;
-  }
-
-  let currentIndex = 0;
-  const cardCount = cards.length;
-  let isDragging = false;
-  let startX = 0;
-  let currentX = 0;
-  let dragCard = null;
-
-  // Generate navigation indicator dots
-  if (dotsContainer) {
-    dotsContainer.innerHTML = '';
-    for (let i = 0; i < cardCount; i++) {
-      const dot = document.createElement('div');
-      dot.classList.add('stack-dot');
-      if (i === 0) dot.classList.add('active');
-      dot.addEventListener('click', () => {
-        currentIndex = i;
-        updateStack();
-      });
-      dotsContainer.appendChild(dot);
-    }
-  }
-
-  const dots = document.querySelectorAll('#about-dots-container .stack-dot');
-
-  // Update layout and 3D transforms for cards
-  const updateStack = () => {
-    cards.forEach((card, idx) => {
-      // Calculate relative index relative to active card
-      let relIdx = (idx - currentIndex + cardCount) % cardCount;
-
-      // Clear inline transform & opacity styles so CSS styles can take over
-      card.style.transform = '';
-      card.style.opacity = '';
-
-      // Clear existing position classes
-      card.classList.remove('stack-pos-0', 'stack-pos-1', 'stack-hidden');
-
-      // Assign position classes
-      if (relIdx === 0) {
-        card.classList.add('stack-pos-0');
-      } else if (relIdx === 1) {
-        card.classList.add('stack-pos-1');
-      } else {
-        card.classList.add('stack-hidden');
-      }
-    });
-
-    // Update dots indicator active class
-    dots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === currentIndex);
-    });
-  };
-
-  // Click controls
-  if (btnNext) {
-    btnNext.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % cardCount;
-      updateStack();
-    });
-  }
-
-  if (btnPrev) {
-    btnPrev.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + cardCount) % cardCount;
-      updateStack();
-    });
-  }
-
-  // Swipe/Drag Event Handlers
-  const handleDragStart = (e) => {
-    // Only allow dragging on top card
-    dragCard = cards[currentIndex];
-    if (!dragCard) return;
-
-    isDragging = true;
-    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-    currentX = startX;
-    dragCard.classList.add('dragging');
-
-    if (e.type === 'touchstart') {
-      stack.addEventListener('touchmove', handleDragMove, { passive: false });
-      document.addEventListener('touchend', handleDragEnd);
-    } else {
-      document.addEventListener('mousemove', handleDragMove);
-      document.addEventListener('mouseup', handleDragEnd);
-    }
-  };
-
-  const handleDragMove = (e) => {
-    if (!isDragging || !dragCard) return;
-
-    currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-    let deltaX = currentX - startX;
-
-    // Stop scrolling page on mobile when swiping
-    if (e.cancelable) e.preventDefault();
-
-    // Rotate slightly during drag
-    let rotate = deltaX * 0.08;
-    dragCard.style.transform = `translate3d(${deltaX}px, 0, 0) rotate(${rotate}deg)`;
-  };
-
-  const handleDragEnd = () => {
-    if (!isDragging || !dragCard) return;
-
-    isDragging = false;
-    dragCard.classList.remove('dragging');
-
-    // Remove drag listeners
-    stack.removeEventListener('touchmove', handleDragMove);
-    document.removeEventListener('touchend', handleDragEnd);
-    document.removeEventListener('mousemove', handleDragMove);
-    document.removeEventListener('mouseup', handleDragEnd);
-
-    let deltaX = currentX - startX;
-    let threshold = 120; // swipe threshold in px
-
-    if (Math.abs(deltaX) > threshold) {
-      // Swipe out left or right
-      let direction = deltaX > 0 ? 1 : -1;
-
-      dragCard.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-      dragCard.style.transform = `translate3d(${direction * 600}px, 0, 0) rotate(${direction * 30}deg)`;
-      dragCard.style.opacity = '0';
-
-      const swipedCard = dragCard;
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % cardCount;
-        swipedCard.style.transition = '';
-        updateStack();
-      }, 300);
-    } else {
-      // Snap back
-      updateStack();
-    }
-
-    dragCard = null;
-  };
-
-  // Mouse drag events
-  stack.addEventListener('mousedown', handleDragStart);
-
-  // Touch drag events
-  stack.addEventListener('touchstart', handleDragStart, { passive: true });
-
-  // Initial layout render
-  updateStack();
-}
-
 
 
