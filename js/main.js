@@ -1228,6 +1228,11 @@ function initAboutStack() {
 
   if (!stack || cards.length === 0) return;
 
+  if (cards.length <= 1) {
+    cards[0].classList.add('stack-pos-0');
+    return;
+  }
+
   let currentIndex = 0;
   const cardCount = cards.length;
   let isDragging = false;
@@ -1236,16 +1241,18 @@ function initAboutStack() {
   let dragCard = null;
 
   // Generate navigation indicator dots
-  dotsContainer.innerHTML = '';
-  for (let i = 0; i < cardCount; i++) {
-    const dot = document.createElement('div');
-    dot.classList.add('stack-dot');
-    if (i === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => {
-      currentIndex = i;
-      updateStack();
-    });
-    dotsContainer.appendChild(dot);
+  if (dotsContainer) {
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < cardCount; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('stack-dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => {
+        currentIndex = i;
+        updateStack();
+      });
+      dotsContainer.appendChild(dot);
+    }
   }
 
   const dots = document.querySelectorAll('#about-dots-container .stack-dot');
