@@ -557,7 +557,7 @@ function initCalendly() {
         Calendly.initPopupWidget({ url: CALENDLY_URL });
       } else {
         // Fallback to mailto link if Calendly script isn't loaded/blocked
-        window.location.href = 'mailto:framebuildersss@gmail.com?subject=Project Inquiry';
+        window.location.href = 'mailto:vaibhavjain7890@gmail.com?subject=Project Inquiry';
       }
     });
   });
