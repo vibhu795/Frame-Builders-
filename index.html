@@ -1205,97 +1205,115 @@
     </section>
 
     <!-- ==========================================================================
-         7. TESTIMONIALS
+         7. AUTHENTIC CLIENT REVIEWS
          ========================================================================== -->
     <section id="testimonials">
       <div class="container">
         <div class="section-header text-center reveal">
-          <span class="section-tag">Testimonials</span>
-          <h2 class="section-title">What Partners Say</h2>
-          <p class="section-desc">Client reviews from founders and creators who trust Frame Builders to build their
-            digital presence.</p>
+          <span class="section-tag">Client Feedback</span>
+          <h2 class="section-title">Authentic Client Reviews</h2>
+          <p class="section-desc">Real, unfiltered feedback from partners and clients who have collaborated with Frame Builders.</p>
         </div>
 
-        <!-- Testimonials Stack Wrapper -->
-        <div class="testimonials-stack-wrapper reveal" id="testimonials-slider">
-          <div class="testimonials-stack" id="testimonials-card-stack">
-
-            <!-- Slide 1 -->
-            <div class="testimonial-card stack-card" id="slide-1">
-              <blockquote class="testimonial-quote">
-                "Frame Builders delivered a cinematic brand film that completely
-                redefined our brand identity. Their attention to lighting, pacing,
-                and sound design is unmatched."
-              </blockquote>
-              <div class="testimonial-author">
-                <div class="author-img-wrapper">
-                  <div class="author-fallback">SJ</div>
-                </div>
-                <div>
-                  <div class="author-name">Sarah Jenkins</div>
-                  <div class="author-info">Creative Director, Aether Motors</div>
-                </div>
+        <div class="reviews-custom-grid reveal">
+          <!-- Left Column: Custom Review Box / Form -->
+          <div class="review-box-form-panel">
+            <div class="review-box-header">
+              <div class="review-box-badge">
+                <span class="review-live-dot"></span>
+                <span>Leave a Review</span>
               </div>
+              <h3 class="review-box-title">Share Your Experience</h3>
+              <p class="review-box-sub">Your genuine review will be published directly on the site.</p>
             </div>
 
-            <!-- Slide 2 -->
-            <div class="testimonial-card stack-card" id="slide-2">
-              <blockquote class="testimonial-quote">
-                "The website and mobile application Frame Builders developed
-                for us has a level of polish that rivals
-                Apple. Our conversions increased by 40% in the first month."
-              </blockquote>
-              <div class="testimonial-author">
-                <div class="author-img-wrapper">
-                  <div class="author-fallback">DC</div>
+            <form id="custom-review-form" class="custom-review-form">
+              <!-- Star Rating Selection -->
+              <div class="form-field-group">
+                <div class="field-label-row">
+                  <label>Select Rating <span class="field-required">*</span></label>
+                  <span class="rating-label-preview" id="rating-label-preview">5.0 / 5.0 (Excellent)</span>
                 </div>
-                <div>
-                  <div class="author-name">David Chen</div>
-                  <div class="author-info">Founder & CTO, Quantum Technologies</div>
+                <div class="star-rating-selector" id="star-rating-selector">
+                  <button type="button" class="star-select-btn active" data-rating="1" aria-label="1 star">&#9733;</button>
+                  <button type="button" class="star-select-btn active" data-rating="2" aria-label="2 stars">&#9733;</button>
+                  <button type="button" class="star-select-btn active" data-rating="3" aria-label="3 stars">&#9733;</button>
+                  <button type="button" class="star-select-btn active" data-rating="4" aria-label="4 stars">&#9733;</button>
+                  <button type="button" class="star-select-btn active" data-rating="5" aria-label="5 stars">&#9733;</button>
+                </div>
+                <input type="hidden" id="custom-review-rating" value="5" required>
+              </div>
+
+              <!-- Full Name -->
+              <div class="form-field-group">
+                <label for="custom-review-name">Your Full Name <span class="field-required">*</span></label>
+                <input type="text" id="custom-review-name" placeholder="e.g. Sarah Jenkins" required autocomplete="name">
+              </div>
+
+              <!-- Role & Service Row -->
+              <div class="form-field-row">
+                <div class="form-field-group">
+                  <label for="custom-review-role">Role / Company <span class="field-optional">(Optional)</span></label>
+                  <input type="text" id="custom-review-role" placeholder="e.g. Founder, Aether Media" autocomplete="organization">
+                </div>
+                <div class="form-field-group">
+                  <label for="custom-review-service">Service <span class="field-optional">(Optional)</span></label>
+                  <select id="custom-review-service" class="custom-review-select">
+                    <option value="">Select Service</option>
+                    <option value="Website Development">Website Development</option>
+                    <option value="CGI & 3D Animation">CGI & 3D Animation</option>
+                    <option value="Video Editing & Production">Video Editing & Production</option>
+                    <option value="Brand & Content Creation">Brand & Content Creation</option>
+                    <option value="AI Automation">AI Automation</option>
+                    <option value="Complete Agency Solution">Complete Agency Solution</option>
+                  </select>
                 </div>
               </div>
-            </div>
 
-            <!-- Slide 3 -->
-            <div class="testimonial-card stack-card" id="slide-3">
-              <blockquote class="testimonial-quote">
-                "Their CGI campaign went viral on Instagram, bringing us over 3 million organic views. Working with
-                them was seamless, fast, and extremely professional."
-              </blockquote>
-              <div class="testimonial-author">
-                <div class="author-img-wrapper">
-                  <div class="author-fallback">ER</div>
-                </div>
+              <!-- Review Text Area -->
+              <div class="form-field-group">
+                <label for="custom-review-text">Your Review <span class="field-required">*</span></label>
+                <textarea id="custom-review-text" rows="4" placeholder="Write your genuine feedback about working with Frame Builders..." required></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="btn btn-primary w-100 review-publish-btn" id="btn-publish-review">
+                <span>Publish Review</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+
+              <!-- Success Alert Banner -->
+              <div id="review-success-banner" class="review-success-banner" style="display: none;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                 <div>
-                  <div class="author-name">Elena Rostova</div>
-                  <div class="author-info">Marketing Head, Solace Skincare</div>
+                  <strong>Review Published!</strong>
+                  <p>Thank you for sharing your authentic feedback.</p>
                 </div>
               </div>
-            </div>
-
+            </form>
           </div>
 
-          <!-- Slider Controls -->
-          <div class="slider-controls">
-            <button class="slider-btn prev" id="slider-prev-btn" aria-label="Previous Review">
-              <svg viewBox="0 0 24 24" stroke="currentColor">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-              </svg>
-            </button>
-            <div class="slider-dots" id="slider-dots-container">
-              <!-- Dots will be dynamically generated by JS -->
+          <!-- Right Column: Live Client Reviews Feed -->
+          <div class="review-box-feed-panel">
+            <!-- Feed Stats Header -->
+            <div class="reviews-stats-card">
+              <div class="stats-score-left">
+                <div class="stats-score-big" id="reviews-avg-rating-val">5.0</div>
+                <div class="stats-score-meta">
+                  <div class="stats-stars-gold" id="reviews-avg-stars-display">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <div class="stats-count-label"><span id="reviews-total-counter">0</span> Verified Reviews</div>
+                </div>
+              </div>
+              <div class="stats-verified-pill">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Live Feed</span>
+              </div>
             </div>
-            <button class="slider-btn next" id="slider-next-btn" aria-label="Next Review">
-              <svg viewBox="0 0 24 24" stroke="currentColor">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
 
-          <div class="text-center" style="margin-top: 35px; display: flex; justify-content: center;">
-            <button class="btn btn-secondary" id="btn-write-review" style="padding: 12px 30px; font-size: 0.95rem; border-radius: 12px;">Write a Review</button>
+            <!-- Scrollable Reviews List -->
+            <div class="reviews-feed-container" id="reviews-feed-container">
+              <!-- Dynamically populated from localStorage & DB -->
+            </div>
           </div>
         </div>
       </div>
@@ -1466,51 +1484,7 @@
 
 
 
-  <!-- Review Modal -->
-  <div id="review-modal" class="modal-overlay">
-    <div class="modal-content">
-      <button class="modal-close" id="btn-close-review-modal">&times;</button>
-      
-      <div class="modal-header">
-        <h2>Share Your Experience</h2>
-        <p class="modal-subtitle">We value your feedback and reviews</p>
-      </div>
-      
-      <form id="submit-review-form">
-        <!-- Star Rating Input -->
-        <div class="form-group-modal" style="align-items: center; gap: 10px; margin-bottom: 20px; width: 100%;">
-          <label style="text-align: center; width: 100%;">Your Rating</label>
-          <div class="star-rating-input">
-            <span class="star-input active" data-rating="1">&#9733;</span>
-            <span class="star-input active" data-rating="2">&#9733;</span>
-            <span class="star-input active" data-rating="3">&#9733;</span>
-            <span class="star-input active" data-rating="4">&#9733;</span>
-            <span class="star-input active" data-rating="5">&#9733;</span>
-          </div>
-          <input type="hidden" id="review-rating-val" value="5" required>
-        </div>
 
-        <div class="form-group-modal">
-          <label for="review-name-input">Full Name</label>
-          <input type="text" id="review-name-input" placeholder="e.g. John Doe" required>
-        </div>
-
-        <div class="form-group-modal">
-          <label for="review-role-input">Role / Company (Optional)</label>
-          <input type="text" id="review-role-input" placeholder="e.g. CEO, TechCorp">
-        </div>
-
-        <div class="form-group-modal">
-          <label for="review-text-input">Your Review</label>
-          <textarea id="review-text-input" placeholder="Write your feedback here..." rows="4" required style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; color: var(--text-primary); font-family: var(--font-sans); font-size: 0.95rem; resize: none;"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100 modal-submit-btn" id="btn-submit-review">
-          <span>Submit Review</span>
-        </button>
-      </form>
-    </div>
-  </div>
 
   <!-- Scripts -->
   <!-- Vapi Voice Assistant Integration -->

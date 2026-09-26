@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSpotlightEffect();
   initPortfolioFilter();
   initStatsCounter();
-  initDynamicReviewsAndTestimonialsSlider();
+  initCustomReviewsBox();
   initScrollReveal();
   initCalendly();
   initPortfolioVideos();
@@ -323,193 +323,7 @@ function initStatsCounter() {
   });
 }
 
-/* ==========================================================================
-   7. Testimonials Slider (Touch and Auto-play supported)
-   ========================================================================== */
-function initTestimonialsSlider() {
-  const stack = document.getElementById('testimonials-card-stack');
-  const cards = document.querySelectorAll('.testimonial-card.stack-card');
-  const btnPrev = document.getElementById('slider-prev-btn');
-  const btnNext = document.getElementById('slider-next-btn');
-  const dotsContainer = document.getElementById('slider-dots-container');
 
-  if (!stack || cards.length === 0) return;
-
-  let currentIndex = 0;
-  const cardCount = cards.length;
-  let isDragging = false;
-  let startX = 0;
-  let currentX = 0;
-  let dragCard = null;
-  let autoplayInterval;
-
-  // Generate navigation indicator dots
-  dotsContainer.innerHTML = '';
-  for (let i = 0; i < cardCount; i++) {
-    const dot = document.createElement('div');
-    dot.classList.add('slider-dot');
-    if (i === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => {
-      currentIndex = i;
-      updateStack();
-      resetAutoplay();
-    });
-    dotsContainer.appendChild(dot);
-  }
-
-  const dots = document.querySelectorAll('.slider-dot');
-
-  // Update layout and 3D transforms for cards
-  const updateStack = () => {
-    cards.forEach((card, idx) => {
-      // Calculate relative index relative to active card
-      let relIdx = (idx - currentIndex + cardCount) % cardCount;
-
-      // Clear inline transform & opacity styles so CSS styles can take over
-      card.style.transform = '';
-      card.style.opacity = '';
-
-      // Clear existing position classes
-      card.classList.remove('stack-pos-0', 'stack-pos-1', 'stack-pos-2', 'stack-hidden');
-
-      // Assign position classes
-      if (relIdx === 0) {
-        card.classList.add('stack-pos-0');
-      } else if (relIdx === 1) {
-        card.classList.add('stack-pos-1');
-      } else if (relIdx === 2) {
-        card.classList.add('stack-pos-2');
-      } else {
-        card.classList.add('stack-hidden');
-      }
-    });
-
-    // Update dots indicator active class
-    dots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === currentIndex);
-    });
-  };
-
-  // Click controls
-  if (btnNext) {
-    btnNext.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % cardCount;
-      updateStack();
-      resetAutoplay();
-    });
-  }
-
-  if (btnPrev) {
-    btnPrev.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + cardCount) % cardCount;
-      updateStack();
-      resetAutoplay();
-    });
-  }
-
-  // Swipe/Drag Event Handlers
-  const handleDragStart = (e) => {
-    // Only allow dragging on top card
-    dragCard = cards[currentIndex];
-    if (!dragCard) return;
-
-    // Pause autoplay during drag
-    clearInterval(autoplayInterval);
-
-    isDragging = true;
-    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-    currentX = startX;
-    dragCard.classList.add('dragging');
-
-    if (e.type === 'touchstart') {
-      stack.addEventListener('touchmove', handleDragMove, { passive: false });
-      document.addEventListener('touchend', handleDragEnd);
-    } else {
-      document.addEventListener('mousemove', handleDragMove);
-      document.addEventListener('mouseup', handleDragEnd);
-    }
-  };
-
-  const handleDragMove = (e) => {
-    if (!isDragging || !dragCard) return;
-
-    currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-    let deltaX = currentX - startX;
-
-    // Stop scrolling page on mobile when swiping
-    if (e.cancelable) e.preventDefault();
-
-    // Rotate slightly during drag
-    let rotate = deltaX * 0.08;
-    dragCard.style.transform = `translate3d(${deltaX}px, 0, 0) rotate(${rotate}deg)`;
-  };
-
-  const handleDragEnd = () => {
-    if (!isDragging || !dragCard) return;
-
-    isDragging = false;
-    dragCard.classList.remove('dragging');
-
-    // Remove drag listeners
-    stack.removeEventListener('touchmove', handleDragMove);
-    document.removeEventListener('touchend', handleDragEnd);
-    document.removeEventListener('mousemove', handleDragMove);
-    document.removeEventListener('mouseup', handleDragEnd);
-
-    let deltaX = currentX - startX;
-    let threshold = 120; // swipe threshold in px
-
-    if (Math.abs(deltaX) > threshold) {
-      // Swipe out left or right
-      let direction = deltaX > 0 ? 1 : -1;
-
-      dragCard.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-      dragCard.style.transform = `translate3d(${direction * 600}px, 0, 0) rotate(${direction * 30}deg)`;
-      dragCard.style.opacity = '0';
-
-      const swipedCard = dragCard;
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % cardCount;
-        swipedCard.style.transition = '';
-        updateStack();
-        resetAutoplay();
-      }, 300);
-    } else {
-      // Snap back
-      updateStack();
-      startAutoplay();
-    }
-
-    dragCard = null;
-  };
-
-  // Mouse drag events
-  stack.addEventListener('mousedown', handleDragStart);
-
-  // Touch drag events
-  stack.addEventListener('touchstart', handleDragStart, { passive: true });
-
-  // Autoplay functionality
-  const startAutoplay = () => {
-    autoplayInterval = setInterval(() => {
-      currentIndex = (currentIndex + 1) % cardCount;
-      updateStack();
-    }, 6000); // Shift every 6s
-  };
-
-  const resetAutoplay = () => {
-    clearInterval(autoplayInterval);
-    startAutoplay();
-  };
-
-  // Pause on hover
-  stack.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-  stack.addEventListener('mouseleave', startAutoplay);
-
-  // Initial layout render
-  updateStack();
-  startAutoplay();
-}
 
 /* ==========================================================================
    8. Scroll Reveal Animations (Intersection Observer)
@@ -811,245 +625,321 @@ function initWhyChooseStack() {
 }
 
 /* ==========================================================================
-   16. Dynamic Reviews & Testimonials Integration
+   16. Authentic Custom Reviews Box & Live Client Feedback
    ========================================================================== */
-function initDynamicReviewsAndTestimonialsSlider() {
-  const stack = document.getElementById('testimonials-card-stack');
-  if (!stack) return;
+function initCustomReviewsBox() {
+  const form = document.getElementById('custom-review-form');
+  const feedContainer = document.getElementById('reviews-feed-container');
+  const avgRatingEl = document.getElementById('reviews-avg-rating-val');
+  const avgStarsEl = document.getElementById('reviews-avg-stars-display');
+  const totalCountEl = document.getElementById('reviews-total-counter');
+  const starButtons = document.querySelectorAll('#star-rating-selector .star-select-btn');
+  const ratingInput = document.getElementById('custom-review-rating');
+  const ratingPreview = document.getElementById('rating-label-preview');
+  const successBanner = document.getElementById('review-success-banner');
+  const submitBtn = document.getElementById('btn-publish-review');
 
-  // Set up Write a Review button/form interactions
-  initWriteReviewSystem();
+  if (!feedContainer) return;
 
-  // Helper to render a review card
-  const renderReviewCard = (rev, idx) => {
-    const cardId = `user-review-${idx}`;
-    const initials = rev.name.trim().split(/\s+/).map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'U';
-
-    let starsHtml = '';
-    const ratingVal = parseInt(rev.rating, 10) || 5;
-    for (let s = 0; s < ratingVal; s++) {
-      starsHtml += '&#9733;';
-    }
-
-    const card = document.createElement('div');
-    card.className = 'testimonial-card stack-card';
-    card.id = cardId;
-    card.innerHTML = `
-      <blockquote class="testimonial-quote">
-        "${rev.reviewText}"
-      </blockquote>
-      <div style="color: #FFB800; font-size: 1.1rem; margin: -5px 0 15px 0; text-align: left;">
-        ${starsHtml}
-      </div>
-      <div class="testimonial-author">
-        <div class="author-img-wrapper">
-          <div class="author-fallback">${initials}</div>
-        </div>
-        <div>
-          <div class="author-name">${rev.name}</div>
-          <div class="author-info">${rev.role || 'Verified Customer'}</div>
-        </div>
-      </div>
-    `;
-    stack.appendChild(card);
+  const RATING_LABELS = {
+    1: '1.0 / 5.0 (Poor)',
+    2: '2.0 / 5.0 (Fair)',
+    3: '3.0 / 5.0 (Good)',
+    4: '4.0 / 5.0 (Very Good)',
+    5: '5.0 / 5.0 (Excellent)'
   };
 
-  // Load reviews from localStorage first
-  let localReviews = [];
-  try {
-    localReviews = JSON.parse(localStorage.getItem('frame_builders_reviews')) || [];
-  } catch (e) {
-    console.error('Error reading local reviews:', e);
-  }
+  let selectedRating = 5;
 
-  // If fallback dummy URL is present, just render local reviews and init slider
-  if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes("YOUR_APPS_SCRIPT_WEB_APP_URL_HERE")) {
-    localReviews.forEach((rev, idx) => renderReviewCard(rev, `local-${idx}`));
-    initTestimonialsSlider();
-    return;
-  }
+  // Star selector interactions
+  if (starButtons.length) {
+    const updateStarUI = (rating) => {
+      starButtons.forEach(btn => {
+        const val = parseInt(btn.getAttribute('data-rating'), 10);
+        btn.classList.toggle('active', val <= rating);
+      });
+      if (ratingPreview) {
+        ratingPreview.textContent = RATING_LABELS[rating] || `${rating}.0 / 5.0`;
+      }
+    };
 
-  fetch(`${APPS_SCRIPT_WEB_APP_URL}?action=getReviews`)
-    .then(res => res.json())
-    .then(data => {
-      // Set to track database review combinations to avoid duplicate displays
-      const renderedKeys = new Set();
+    starButtons.forEach(btn => {
+      const val = parseInt(btn.getAttribute('data-rating'), 10);
 
-      if (data.status === 'success' && data.reviews && data.reviews.length > 0) {
-        data.reviews.forEach((rev, idx) => {
-          renderReviewCard(rev, `db-${idx}`);
-          renderedKeys.add(`${rev.name.trim().toLowerCase()}-${rev.reviewText.trim().toLowerCase()}`);
+      btn.addEventListener('mouseenter', () => {
+        starButtons.forEach(b => {
+          const v = parseInt(b.getAttribute('data-rating'), 10);
+          b.classList.toggle('hovered', v <= val);
         });
+        if (ratingPreview) {
+          ratingPreview.textContent = RATING_LABELS[val] || `${val}.0 / 5.0`;
+        }
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        starButtons.forEach(b => b.classList.remove('hovered'));
+        updateStarUI(selectedRating);
+      });
+
+      btn.addEventListener('click', () => {
+        selectedRating = val;
+        if (ratingInput) ratingInput.value = val;
+        updateStarUI(selectedRating);
+      });
+    });
+
+    updateStarUI(5);
+  }
+
+  // Helper to escape HTML to prevent XSS
+  const escapeHtml = (str) => {
+    if (!str) return '';
+    return str.toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
+  // Helper to format date
+  const formatReviewDate = (dateStr) => {
+    if (!dateStr) return 'Recently Verified';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return 'Recently Verified';
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+      return 'Recently Verified';
+    }
+  };
+
+  // Load reviews from localStorage
+  const getStoredReviews = () => {
+    try {
+      return JSON.parse(localStorage.getItem('frame_builders_reviews')) || [];
+    } catch (e) {
+      console.error('Error reading localStorage reviews:', e);
+      return [];
+    }
+  };
+
+  const saveStoredReviews = (reviews) => {
+    try {
+      localStorage.setItem('frame_builders_reviews', JSON.stringify(reviews));
+    } catch (e) {
+      console.error('Error saving localStorage reviews:', e);
+    }
+  };
+
+  // Render review feed
+  let allReviews = getStoredReviews();
+
+  const renderReviewsFeed = (reviews, isNewAddition = false) => {
+    feedContainer.innerHTML = '';
+
+    if (!reviews || reviews.length === 0) {
+      if (avgRatingEl) avgRatingEl.textContent = '5.0';
+      if (avgStarsEl) avgStarsEl.innerHTML = '&#9733;&#9733;&#9733;&#9733;&#9733;';
+      if (totalCountEl) totalCountEl.textContent = '0';
+
+      feedContainer.innerHTML = `
+        <div class="review-empty-state">
+          <div class="empty-icon">💬</div>
+          <h4>No Reviews Yet</h4>
+          <p>Be the first client or partner to share your authentic experience with Frame Builders!</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Calculate dynamic stats
+    const totalScore = reviews.reduce((acc, r) => acc + (parseInt(r.rating, 10) || 5), 0);
+    const avgScore = (totalScore / reviews.length).toFixed(1);
+
+    if (avgRatingEl) avgRatingEl.textContent = avgScore;
+    if (totalCountEl) totalCountEl.textContent = reviews.length.toString();
+    if (avgStarsEl) {
+      const roundedStars = Math.round(parseFloat(avgScore));
+      let starsText = '';
+      for (let s = 0; s < 5; s++) {
+        starsText += s < roundedStars ? '&#9733;' : '&#9734;';
+      }
+      avgStarsEl.innerHTML = starsText;
+    }
+
+    // Render cards
+    reviews.forEach((rev, idx) => {
+      const name = rev.name || 'Anonymous Client';
+      const role = rev.role || 'Verified Client';
+      const service = rev.service || '';
+      const text = rev.reviewText || '';
+      const rating = parseInt(rev.rating, 10) || 5;
+      const date = rev.date || new Date().toISOString();
+
+      const initials = name.trim().split(/\s+/).map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'C';
+
+      let starsHtml = '';
+      for (let s = 0; s < 5; s++) {
+        starsHtml += s < rating ? '&#9733;' : '&#9734;';
       }
 
-      // Append local reviews that aren't synced in sheet database yet
-      localReviews.forEach((rev, idx) => {
-        const key = `${rev.name.trim().toLowerCase()}-${rev.reviewText.trim().toLowerCase()}`;
-        if (!renderedKeys.has(key)) {
-          renderReviewCard(rev, `local-${idx}`);
-        }
-      });
-
-      initTestimonialsSlider();
-    })
-    .catch(err => {
-      console.error('Failed to load dynamic reviews from DB, loading local reviews:', err);
-      localReviews.forEach((rev, idx) => renderReviewCard(rev, `local-fallback-${idx}`));
-      initTestimonialsSlider();
+      const card = document.createElement('div');
+      card.className = `user-review-card ${isNewAddition && idx === 0 ? 'just-added' : ''}`;
+      card.innerHTML = `
+        <div class="review-card-top">
+          <div class="review-user-profile">
+            <div class="review-user-avatar">
+              <span>${escapeHtml(initials)}</span>
+            </div>
+            <div class="review-user-meta">
+              <span class="review-user-name">${escapeHtml(name)}</span>
+              <span class="review-user-role">${escapeHtml(role)}</span>
+            </div>
+          </div>
+          <div class="review-card-stars-box">
+            <div class="review-card-stars">${starsHtml}</div>
+            ${service ? `<span class="review-service-tag">${escapeHtml(service)}</span>` : ''}
+          </div>
+        </div>
+        <p class="review-card-body">"${escapeHtml(text)}"</p>
+        <div class="review-card-footer">
+          <span class="review-date">${formatReviewDate(date)}</span>
+          <span class="review-verified-badge">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Verified Review</span>
+          </span>
+        </div>
+      `;
+      feedContainer.appendChild(card);
     });
-}
-
-function initWriteReviewSystem() {
-  const btnWriteReview = document.getElementById('btn-write-review');
-  const reviewModal = document.getElementById('review-modal');
-  const closeReviewModalBtn = document.getElementById('btn-close-review-modal');
-  const submitReviewForm = document.getElementById('submit-review-form');
-  const stars = document.querySelectorAll('.star-input');
-  const ratingInput = document.getElementById('review-rating-val');
-  const btnSubmitReview = document.getElementById('btn-submit-review');
-
-  if (!btnWriteReview || !reviewModal) return;
-
-  // Open Write Review modal
-  btnWriteReview.addEventListener('click', () => {
-    // Reset stars to 5 by default
-    stars.forEach(s => s.classList.add('active'));
-    if (ratingInput) ratingInput.value = '5';
-    if (submitReviewForm) submitReviewForm.reset();
-    reviewModal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Lock background scroll
-  });
-
-  // Close Write Review modal
-  const closeReviewModal = () => {
-    reviewModal.classList.remove('active');
-    document.body.style.overflow = ''; // Release scroll lock
   };
 
-  if (closeReviewModalBtn) {
-    closeReviewModalBtn.addEventListener('click', closeReviewModal);
+  // Initial render from local storage
+  renderReviewsFeed(allReviews);
+
+  // Fetch from database/Google Sheets if available
+  if (APPS_SCRIPT_WEB_APP_URL && !APPS_SCRIPT_WEB_APP_URL.includes("YOUR_APPS_SCRIPT_WEB_APP_URL_HERE")) {
+    fetch(`${APPS_SCRIPT_WEB_APP_URL}?action=getReviews`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success' && data.reviews && data.reviews.length > 0) {
+          const dbReviews = data.reviews.map(r => ({
+            name: r.name,
+            role: r.role || '',
+            service: r.service || '',
+            rating: parseInt(r.rating, 10) || 5,
+            reviewText: r.reviewText || '',
+            date: r.date || r.timestamp || new Date().toISOString()
+          }));
+
+          // Merge without duplicate keys
+          const existingKeys = new Set(allReviews.map(r => `${r.name.toLowerCase()}-${r.reviewText.toLowerCase()}`));
+          let newFound = false;
+
+          dbReviews.forEach(dbr => {
+            const key = `${dbr.name.toLowerCase()}-${dbr.reviewText.toLowerCase()}`;
+            if (!existingKeys.has(key)) {
+              allReviews.push(dbr);
+              newFound = true;
+            }
+          });
+
+          if (newFound) {
+            saveStoredReviews(allReviews);
+            renderReviewsFeed(allReviews);
+          }
+        }
+      })
+      .catch(err => {
+        console.log('Database reviews sync optional/offline:', err);
+      });
   }
 
-  reviewModal.addEventListener('click', (e) => {
-    if (e.target === reviewModal) {
-      closeReviewModal();
-    }
-  });
-
-  // Stars click & hover selection logic
-  stars.forEach(star => {
-    star.addEventListener('mouseover', () => {
-      const rating = parseInt(star.getAttribute('data-rating'), 10);
-      stars.forEach(s => {
-        if (parseInt(s.getAttribute('data-rating'), 10) <= rating) {
-          s.classList.add('hovered');
-        } else {
-          s.classList.remove('hovered');
-        }
-      });
-    });
-
-    star.addEventListener('mouseout', () => {
-      stars.forEach(s => s.classList.remove('hovered'));
-    });
-
-    star.addEventListener('click', () => {
-      const rating = parseInt(star.getAttribute('data-rating'), 10);
-      if (ratingInput) ratingInput.value = rating;
-      stars.forEach(s => {
-        if (parseInt(s.getAttribute('data-rating'), 10) <= rating) {
-          s.classList.add('active');
-        } else {
-          s.classList.remove('active');
-        }
-      });
-    });
-  });
-
-  // Submit Review Form
-  if (submitReviewForm) {
-    submitReviewForm.addEventListener('submit', (e) => {
+  // Handle Form Submission
+  if (form) {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const nameVal = document.getElementById('review-name-input').value.trim();
-      const roleVal = document.getElementById('review-role-input').value.trim();
-      const ratingVal = ratingInput ? ratingInput.value : '5';
-      const textVal = document.getElementById('review-text-input').value.trim();
+      const nameInput = document.getElementById('custom-review-name');
+      const roleInput = document.getElementById('custom-review-role');
+      const serviceInput = document.getElementById('custom-review-service');
+      const textInput = document.getElementById('custom-review-text');
 
-      if (!nameVal || !textVal) return;
+      const name = nameInput ? nameInput.value.trim() : '';
+      const role = roleInput ? roleInput.value.trim() : '';
+      const service = serviceInput ? serviceInput.value : '';
+      const reviewText = textInput ? textInput.value.trim() : '';
+      const rating = parseInt(ratingInput ? ratingInput.value : selectedRating, 10) || 5;
 
-      const originalBtnText = btnSubmitReview.innerHTML;
-      btnSubmitReview.disabled = true;
-      btnSubmitReview.innerHTML = '<span>Submitting...</span>';
+      if (!name || !reviewText) return;
 
-      const reviewData = {
-        action: 'addReview',
-        name: nameVal,
-        role: roleVal,
-        rating: ratingVal,
-        reviewText: textVal
+      const newReview = {
+        id: Date.now(),
+        name: name,
+        role: role || 'Verified Client',
+        service: service,
+        rating: rating,
+        reviewText: reviewText,
+        date: new Date().toISOString()
       };
 
-      const handleSuccess = () => {
-        // Save review to localStorage immediately
-        let localReviews = [];
-        try {
-          localReviews = JSON.parse(localStorage.getItem('frame_builders_reviews')) || [];
-        } catch (e) { }
+      // Disable button briefly
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Publishing...</span>';
+      }
 
-        localReviews.push({
-          name: nameVal,
-          role: roleVal,
-          rating: ratingVal,
-          reviewText: textVal,
-          date: new Date().toISOString()
-        });
+      // Add to beginning of array
+      allReviews.unshift(newReview);
+      saveStoredReviews(allReviews);
 
-        try {
-          localStorage.setItem('frame_builders_reviews', JSON.stringify(localReviews));
-        } catch (e) {
-          console.error('Failed to save review in local storage:', e);
-        }
+      // Re-render feed immediately
+      renderReviewsFeed(allReviews, true);
 
-        btnSubmitReview.disabled = false;
-        btnSubmitReview.innerHTML = originalBtnText;
-        closeReviewModal();
-        alert('Thank you! Your review has been submitted successfully.');
-        location.reload(); // Reload to fetch and display the review in the slider
-      };
+      // Show success banner
+      if (successBanner) {
+        successBanner.style.display = 'flex';
+        setTimeout(() => {
+          successBanner.style.display = 'none';
+        }, 5000);
+      }
 
-      const handleFailure = (msg) => {
-        console.error('Failed to submit review:', msg);
-        if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes("YOUR_APPS_SCRIPT_WEB_APP_URL_HERE")) {
-          setTimeout(handleSuccess, 1000);
-        } else {
-          alert('Error submitting review: ' + msg + '. Proceeding with local simulation.');
-          setTimeout(handleSuccess, 1000);
-        }
-      };
+      // Reset form
+      form.reset();
+      selectedRating = 5;
+      if (ratingInput) ratingInput.value = 5;
+      if (starButtons.length) {
+        starButtons.forEach(btn => btn.classList.add('active'));
+      }
+      if (ratingPreview) {
+        ratingPreview.textContent = RATING_LABELS[5];
+      }
 
-      if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes("YOUR_APPS_SCRIPT_WEB_APP_URL_HERE")) {
-        setTimeout(handleSuccess, 1200);
-      } else {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <span>Publish Review</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        `;
+      }
+
+      // Send to Apps Script in background if configured
+      if (APPS_SCRIPT_WEB_APP_URL && !APPS_SCRIPT_WEB_APP_URL.includes("YOUR_APPS_SCRIPT_WEB_APP_URL_HERE")) {
         fetch(APPS_SCRIPT_WEB_APP_URL, {
           method: 'POST',
           mode: 'cors',
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          body: JSON.stringify(reviewData)
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.status === 'success') {
-              handleSuccess();
-            } else {
-              handleFailure(data.message || 'Server error');
-            }
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            action: 'addReview',
+            name: newReview.name,
+            role: newReview.role,
+            service: newReview.service,
+            rating: newReview.rating,
+            reviewText: newReview.reviewText,
+            date: newReview.date
           })
-          .catch(err => {
-            handleFailure(err.message || 'Network error');
-          });
+        }).catch(err => console.log('Apps script sync error:', err));
       }
     });
   }
