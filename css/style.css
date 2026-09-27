@@ -36,7 +36,7 @@
   --transition-fast: all 0.2s ease;
 
   /* Spacing */
-  --section-padding: clamp(80px, 12vw, 140px);
+  --section-padding: clamp(48px, 6vw, 80px);
   --container-width: 1200px;
 }
 
@@ -114,7 +114,7 @@ body {
 /* Title & Description Structure */
 .section-header {
   max-width: 650px;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 36px auto;
 }
 
 .section-tag {
@@ -315,8 +315,8 @@ header.scrolled {
    4. Hero Section
    ========================================================================== */
 #hero {
-  padding-top: calc(80px + 6vw);
-  padding-bottom: clamp(60px, 10vw, 100px);
+  padding-top: calc(70px + 3vw);
+  padding-bottom: clamp(35px, 5vw, 55px);
   position: relative;
   overflow: hidden;
 }
@@ -335,79 +335,53 @@ header.scrolled {
 }
 
 .hero-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 48px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-}
-
-.hero-badge {
-  font-size: 0.85rem;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-color);
-  margin-bottom: 24px;
-  display: inline-flex;
   align-items: center;
-  gap: 8px;
-}
-
-.hero-badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--blue-electric);
-  box-shadow: 0 0 10px var(--blue-electric);
-  animation: pulse-glow 2s infinite;
-}
-
-@keyframes pulse-glow {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(0.9);
-    opacity: 0.6;
-  }
+  text-align: center;
+  width: 100%;
 }
 
 .hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.8rem, 6.5vw, 4.4rem);
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 1.08;
   letter-spacing: -0.04em;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
+  text-align: center;
 }
 
 .hero-sub {
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 40px;
-  max-width: 580px;
+  margin-bottom: 28px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.hero-content .btn-group {
+  justify-content: center;
 }
 
 .hero-trust {
-  margin-top: 48px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  align-items: center;
 }
 
 .hero-trust-text {
@@ -422,6 +396,7 @@ header.scrolled {
   display: flex;
   gap: 32px;
   align-items: center;
+  justify-content: center;
   opacity: 0.65;
   flex-wrap: wrap;
 }
@@ -435,169 +410,6 @@ header.scrolled {
 .hero-trust-logo:hover {
   filter: none;
   opacity: 1;
-}
-
-/* Empty Premium Container for Spline 3D */
-.hero-visual-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.hero-3d-container {
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
-  border: 1px solid var(--border-color);
-  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.03), transparent), rgba(14, 19, 37, 0.4);
-  backdrop-filter: var(--glass-blur);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-premium), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  transition: border-color var(--transition-smooth);
-}
-
-.hero-3d-container:hover {
-  border-color: var(--border-hover);
-}
-
-/* Interactive SVG/CSS glowing sphere core placeholder inside the 3D Container */
-.interactive-3d-core {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
-
-.core-glowing-sphere {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 120px;
-  margin-top: -60px;
-  margin-left: -60px;
-  border-radius: 50%;
-  background: var(--brand-gradient);
-  filter: blur(25px);
-  opacity: 0.75;
-  animation: breathe 6s ease-in-out infinite alternate;
-}
-
-.core-grid-mesh {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transform: rotateX(75deg);
-  animation: spin-orbit 20s linear infinite;
-}
-
-.core-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 2px solid rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  transform-style: preserve-3d;
-}
-
-.core-ring-1 {
-  transform: rotateX(60deg) rotateY(20deg);
-  border-top-color: var(--blue-electric);
-  border-bottom-color: var(--purple-premium);
-  animation: spin-orbit 12s linear infinite;
-}
-
-.core-ring-2 {
-  transform: rotateX(30deg) rotateY(-40deg);
-  border-left-color: var(--blue-royal);
-  border-right-color: var(--purple-premium);
-  animation: spin-orbit-reverse 16s linear infinite;
-}
-
-.core-ring-3 {
-  transform: rotateX(15deg) rotateY(80deg);
-  border-color: rgba(255, 255, 255, 0.2);
-  border-style: dashed;
-  animation: spin-orbit 24s linear infinite;
-}
-
-.core-node {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #fff;
-  box-shadow: 0 0 10px #fff;
-}
-
-.core-node-1 {
-  top: 10%;
-  left: 50%;
-  background-color: var(--blue-electric);
-}
-
-.core-node-2 {
-  bottom: 20%;
-  right: 10%;
-  background-color: var(--purple-premium);
-}
-
-@keyframes breathe {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.6;
-  }
-
-  100% {
-    transform: scale(1.15);
-    opacity: 0.9;
-  }
-}
-
-@keyframes spin-orbit {
-  0% {
-    transform: rotate3d(1, 1, 1, 0deg);
-  }
-
-  100% {
-    transform: rotate3d(1, 1, 1, 360deg);
-  }
-}
-
-@keyframes spin-orbit-reverse {
-  0% {
-    transform: rotate3d(1, -1, 1, 360deg);
-  }
-
-  100% {
-    transform: rotate3d(1, -1, 1, 0deg);
-  }
-}
-
-/* Subtle glowing backdrop behind 3D container */
-.hero-glow-back {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
-  filter: blur(40px);
-  z-index: -1;
-  pointer-events: none;
 }
 
 /* Spline Loader styles */

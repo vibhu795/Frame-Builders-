@@ -379,8 +379,7 @@ function initServiceCardsClick() {
     'service-video-prod': 'btn-filter-video',
     'service-content-creation': 'btn-filter-website',
     'service-web-dev': 'btn-filter-website',
-    'service-thumb-creation': 'btn-filter-vfx',
-    'service-cgi-ads': 'btn-filter-cgi'
+    'service-thumb-creation': 'btn-filter-vfx'
   };
 
   Object.keys(cardFilters).forEach(cardId => {
